@@ -1,0 +1,4 @@
+---
+# defaults file for devopssetup
+crfile_repo: https://github.com/eacmesquita/crfiles
+jenkins_installscript: ""

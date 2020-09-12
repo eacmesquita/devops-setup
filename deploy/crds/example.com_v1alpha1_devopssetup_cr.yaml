@@ -1,0 +1,20 @@
+apiVersion: example.com/v1alpha1
+kind: DevopsSetup
+metadata:
+  name: example-devopssetup
+spec:
+  # Add fields here
+  devops_namespace: default
+  devops_repository: https://github.com/eacmesquita/devops-setup_yaml
+  devops_script: >-
+    cd workspace/devops-setup_yaml/jenkins; 
+    oc create -f jenkins-all-in-one-v1alpha2.yaml; 
+    oc create -f crds/jenkins_v1alpha2_jenkins_crd.yaml;
+    oc create -f crds/openshift_jenkins_v1alpha2_jenkins_cr.yaml;
+    cd ../anchore;
+    oc create -f . ;
+    oc create -f crds/anchore_v1alpha1_anchoreengine_crd.yaml;
+    oc create -f crds/anchore_v1alpha1_anchoreengine_cr.yaml;
+    oc expose svc anchore-engine-anchore-engine-api;
+    cd ..;
+    oc new-app -f sonarqube/sonarqube-template.yaml -p SONARQUBE_SERVICE_NAME=sonarqube;

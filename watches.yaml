@@ -1,0 +1,5 @@
+---
+- version: v1alpha1
+  group: example.com
+  kind: DevopsSetup
+  role: /opt/ansible/roles/devopssetup

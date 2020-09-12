@@ -1,0 +1,46 @@
+---
+# tasks file for devopssetup
+- name: Install
+  k8s:
+    definition:
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: devops-setup-deployment
+        namespace: "{{ devops_namespace }}"
+        labels:
+          app: devops-setup-deployment
+      spec:
+        replicas: 1
+        selector:
+          matchLabels:
+            app: devops-setup-deployment
+        template:
+          metadata:
+            labels:
+              app: devops-setup-deployment
+          spec:
+            containers:
+            - name: install-anchore
+              image: quay.io/openshift/origin-cli:latest
+              command: ["bash","-c"]
+              args:
+              - "{{ devops_script }}"
+              volumeMounts:
+              - name: source
+                mountPath: /workspace
+      
+            volumes:
+            - emptyDir: {}
+              name: source
+      
+            initContainers:
+            - name: git-clone
+              image: alpine/git
+              command:
+              - git
+              - clone
+              - "{{ devops_repository }}"
+              volumeMounts:
+              - name: source
+                mountPath: /git
