@@ -7,7 +7,7 @@
       kind: Deployment
       metadata:
         name: devops-setup-deployment
-        namespace: "{{ devops_namespace }}"
+        namespace: "{{ meta.namespace }}"
         labels:
           app: devops-setup-deployment
       spec:

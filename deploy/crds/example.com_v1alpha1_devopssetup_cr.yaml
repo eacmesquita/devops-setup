@@ -4,7 +4,6 @@ metadata:
   name: example-devopssetup
 spec:
   # Add fields here
-  devops_namespace: default
   devops_repository: https://github.com/eacmesquita/devops-setup_yaml
   devops_script: >-
     cd workspace/devops-setup_yaml/jenkins; 
@@ -16,5 +15,9 @@ spec:
     oc create -f crds/anchore_v1alpha1_anchoreengine_crd.yaml;
     oc create -f crds/anchore_v1alpha1_anchoreengine_cr.yaml;
     oc expose svc anchore-engine-anchore-engine-api;
-    cd ..;
-    oc new-app -f sonarqube/sonarqube-template.yaml -p SONARQUBE_SERVICE_NAME=sonarqube;
+    cd ../sonarqube;
+    oc new-app -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=password -e POSTGRES_DB=postgresdb postgres:latest; 
+    oc create -f sonarqube-pvc.yaml;
+    oc create -f sonarqube-dc.yaml;
+    oc create -f sonarqube-svc.yaml;
+    oc expose svc sonarqube;
